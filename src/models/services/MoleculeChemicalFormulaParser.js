@@ -1,7 +1,7 @@
 import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError.js";
 import { InvalidStringFormatError } from "../../exceptions/InvalidStringFormatError.js";
 
-class MoleculeChemicalFormulaParser {
+export class MoleculeChemicalFormulaParser {
   /**
    * парсит химическую формулу молекулы
    * @param {string} formula примеры: H, H2, Na, Na2, H2SO4, H2SO4(H2O)2, (N2O)3, (H2)2H2SO4(H2)2
@@ -19,7 +19,7 @@ class MoleculeChemicalFormulaParser {
       );
     }
 
-    return formula.includes('(')
+    return formula.includes("(")
       ? this.#parseStringContainingParentheses(formula)
       : this.#parseStringNotContainingParentheses(formula);
   }
@@ -37,7 +37,9 @@ class MoleculeChemicalFormulaParser {
     const argumentCheckingPattern = /^[A-Z][a-z]?[1-9]{0,2}$/;
 
     if (!argumentCheckingPattern.test(chemicalElementWithIndex)) {
-      throw new InvalidStringFormatError(`'chemicalElementWithIndex' должен иметь вид "хим.элемент, цифра от 1 до 99 или без цифры", примеры: H, H2, Na, Na2.`);
+      throw new InvalidStringFormatError(
+        `'chemicalElementWithIndex' должен иметь вид "хим.элемент, цифра от 1 до 99 или без цифры", примеры: H, H2, Na, Na2.`
+      );
     }
 
     const chemicalElement = chemicalElementWithIndex.match(/[A-Z][a-z]?/)[0];
@@ -61,7 +63,9 @@ class MoleculeChemicalFormulaParser {
     const argumentCheckingPattern = /^([A-Z][a-z]?[1-9]{0,2})+$/;
 
     if (!argumentCheckingPattern.test(formula)) {
-      throw new InvalidStringFormatError(`'formula' не должна содержать скобки.`);
+      throw new InvalidStringFormatError(
+        `'formula' не должна содержать скобки.`
+      );
     }
 
     let parsedData = {};
@@ -97,11 +101,18 @@ class MoleculeChemicalFormulaParser {
       throw new InvalidArgumentError(`'formula' не может быть пустой строкой.`);
     }
 
-    const argumentCheckingPattern1 = /^(\(([A-Z][a-z]?[1-9]{0,2})+\)[1-9]{1,2}([A-Z][a-z]?[1-9]{0,2})*)+$/;
-    const argumentCheckingPattern2 = /^(([A-Z][a-z]?[1-9]{0,2})+\(([A-Z][a-z]?[1-9]{0,2})+\)[1-9]{1,2})+$/;
+    const argumentCheckingPattern1 =
+      /^(\(([A-Z][a-z]?[1-9]{0,2})+\)[1-9]{1,2}([A-Z][a-z]?[1-9]{0,2})*)+$/;
+    const argumentCheckingPattern2 =
+      /^(([A-Z][a-z]?[1-9]{0,2})+\(([A-Z][a-z]?[1-9]{0,2})+\)[1-9]{1,2})+$/;
 
-    if (!argumentCheckingPattern1.test(formula) && !argumentCheckingPattern2.test(formula)) {
-      throw new InvalidStringFormatError(`'formula' должна содержать скобки, пример: (H2O)2, H2(H2)2, (H2)2H2, (H2)2H2(H2)2`);
+    if (
+      !argumentCheckingPattern1.test(formula) &&
+      !argumentCheckingPattern2.test(formula)
+    ) {
+      throw new InvalidStringFormatError(
+        `'formula' должна содержать скобки, пример: (H2O)2, H2(H2)2, (H2)2H2, (H2)2H2(H2)2`
+      );
     }
 
     const parsingPattern = /\([^()]+\)\d*|\w+/g;
@@ -175,7 +186,7 @@ class MoleculeChemicalFormulaParser {
     if (!formula) {
       throw new InvalidArgumentError(`'formula' не может быть пустой строкой.`);
     }
-    
+
     //H, H2, Na, Na2, NaCl, H2SO4
     const pattern1 = /^([A-Z][a-z]?[1-9]{0,2})+$/;
     //(H2O)2, (H2)2, (H2)2H2(H2)2
@@ -185,14 +196,16 @@ class MoleculeChemicalFormulaParser {
     const pattern3 =
       /^(([A-Z][a-z]?[1-9]{0,2})+\(([A-Z][a-z]?[1-9]{0,2})+\)[1-9]{1,2})+$/;
 
-    return pattern1.test(formula) || pattern2.test(formula) || pattern3.test(formula);
+    return (
+      pattern1.test(formula) || pattern2.test(formula) || pattern3.test(formula)
+    );
   }
 }
 
 let parser = new MoleculeChemicalFormulaParser();
 
 try {
-  for (let key of [
+  for (let formula of [
     "H",
     "H2",
     "Na",
@@ -204,11 +217,11 @@ try {
     "(H2O2",
     "(",
     ")",
-    ")H2O2"
+    ")H2O2",
   ]) {
-    console.log(`МОЛЕКУЛА: ${key}`);
-    console.log(parser.parse(key));
+    console.log(`МОЛЕКУЛА: ${formula}`);
+    console.log(parser.parse(formula));
   }
-} catch(error) {
-  console.log(`Ошибка: ${error.message}`);
+} catch (error) {
+  console.log(`Ошибка: ${error.message}\nСтек: ${error.stack}`);
 }
