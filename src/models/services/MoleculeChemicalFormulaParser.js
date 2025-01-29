@@ -202,6 +202,7 @@ export class MoleculeChemicalFormulaParser {
   }
 }
 
+/*TEST
 let parser = new MoleculeChemicalFormulaParser();
 
 try {
@@ -225,3 +226,4 @@ try {
 } catch (error) {
   console.log(`Ошибка: ${error.message}\nСтек: ${error.stack}`);
 }
+*/
