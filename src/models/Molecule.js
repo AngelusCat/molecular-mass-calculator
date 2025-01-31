@@ -42,7 +42,7 @@ for (const molecule of [
   new Molecule(parser, "H"),
   new Molecule(parser, "H2"),
   new Molecule(parser, "Na"),
-  new Molecule(parser, "Na"),
+  new Molecule(parser, "Na2"),
   new Molecule(parser, "NaCl"),
   new Molecule(parser, "H2SO4"),
   new Molecule(parser, "(H2)2"),
