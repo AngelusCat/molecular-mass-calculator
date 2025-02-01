@@ -1,10 +1,12 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+import { URL } from "url";
 
 export class MoleculeController {
   index(req, res) {
     const pathToHtmlTemplate = path.join(
-      path.dirname,
+      path.dirname(fileURLToPath(import.meta.url)),
       "..",
       "resources",
       "views",
@@ -23,6 +25,9 @@ export class MoleculeController {
   }
 
   calculateMolecularWeight(req, res) {
-    //
+    const moleculeFromGetParameters = new URL(req.url, `http://${req.headers.host}`).searchParams.get("molecule");
+    
+    res.writeHead(200, {"Content-type": "text/html"});
+    res.end(`<p>${moleculeFromGetParameters}</p>`);
   }
 }
