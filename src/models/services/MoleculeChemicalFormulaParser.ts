@@ -8,7 +8,7 @@ export class MoleculeChemicalFormulaParser {
    * @returns {object} примеры: H -> {H:1}, H2 -> {H:2}, Na -> {Na:1}, Na2 -> {Na:2}, H2SO4 -> {H:2, S:1, O4}, H2SO4(H2O)2 -> {H:6, S:1, O:6}, (N2O)3 -> {N:6, O:3},
    * (H2)2H2SO4(H2)2 -> {H:10, S:1, O:4}
    */
-  parse(formula) {
+  parse(formula: string) {
     if (!formula) {
       throw new InvalidArgumentError(`'formula' не может быть пустой строкой.`);
     }
@@ -29,12 +29,12 @@ export class MoleculeChemicalFormulaParser {
    * @param {string} chemicalElementWithIndex примеры: H, H2, Na, Na2
    * @returns {object} примеры: H -> {H:1}, H2 -> {H:2}, Na -> {Na:1}, Na2 -> {Na:2}
    */
-  #parseStringIntoChemicalElementAndIndex(chemicalElementWithIndex) {
+  #parseStringIntoChemicalElementAndIndex(chemicalElementWithIndex: string) {
     if (!chemicalElementWithIndex) {
       throw new InvalidArgumentError(`'formula' не может быть пустой строкой.`);
     }
 
-    const argumentCheckingPattern = /^[A-Z][a-z]?[1-9]{0,2}$/;
+    const argumentCheckingPattern: RegExp = /^[A-Z][a-z]?[1-9]{0,2}$/;
 
     if (!argumentCheckingPattern.test(chemicalElementWithIndex)) {
       throw new InvalidStringFormatError(
@@ -42,8 +42,8 @@ export class MoleculeChemicalFormulaParser {
       );
     }
 
-    const chemicalElement = chemicalElementWithIndex.match(/[A-Z][a-z]?/)[0];
-    const index = Number(chemicalElementWithIndex.match(/[1-9]{0,2}$/)[0] || 1);
+    const chemicalElement: string = chemicalElementWithIndex.match(/[A-Z][a-z]?/)[0];
+    const index: number = Number(chemicalElementWithIndex.match(/[1-9]{0,2}$/)[0] || 1);
 
     return {
       [chemicalElement]: index,
@@ -55,7 +55,7 @@ export class MoleculeChemicalFormulaParser {
    * @param {string} formula примеры: H2SO4, H2O
    * @returns {object} примеры: H2SO4 -> {H:1, S:1, O:4}, H2O -> {H:2, O:1}
    */
-  #parseStringNotContainingParentheses(formula) {
+  #parseStringNotContainingParentheses(formula: string) {
     if (!formula) {
       throw new InvalidArgumentError(`'formula' не может быть пустой строкой.`);
     }

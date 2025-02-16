@@ -2,9 +2,10 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { URL } from "url";
+import { IncomingMessage, ServerResponse } from "http";
 
 export class MoleculeController {
-  index(req, res) {
+  index(req: IncomingMessage, res: ServerResponse) {
     const pathToHtmlTemplate = path.join(
       path.dirname(fileURLToPath(import.meta.url)),
       "..",
@@ -24,10 +25,12 @@ export class MoleculeController {
     });
   }
 
-  calculateMolecularWeight(req, res) {
-    const moleculeFromGetParameters = new URL(req.url, `http://${req.headers.host}`).searchParams.get("molecule");
+  calculateMolecularWeight(req: IncomingMessage, res: ServerResponse) {
+    if (req.url) {
+      const moleculeFromGetParameters: string|null = new URL(req.url, `http://${req.headers.host}`).searchParams.get("molecule");
     
-    res.writeHead(200, {"Content-type": "text/html"});
-    res.end(`<p>${moleculeFromGetParameters}</p>`);
+      res.writeHead(200, {"Content-type": "text/html"});
+      res.end(`<p>${moleculeFromGetParameters}</p>`);
+    }
   }
 }

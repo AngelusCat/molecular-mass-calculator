@@ -2,10 +2,10 @@ import { MoleculeChemicalFormulaParser } from "./services/MoleculeChemicalFormul
 import { atomicMasses } from "./AtomicMasses.js";
 
 export class Molecule {
-  #formula;
-  #parser;
+  #formula: string;
+  #parser: MoleculeChemicalFormulaParser;
 
-  constructor(parser, formula) {
+  constructor(parser: MoleculeChemicalFormulaParser, formula: string) {
     this.#parser = parser;
     this.#formula = formula;
   }
@@ -15,9 +15,9 @@ export class Molecule {
    * @returns {number} молекулярная масса молекулы
    */
   calculateMolecularWeight() {
-    let molecularWeight = 0;
+    let molecularWeight: number = 0;
 
-    const chemicalElementsAndTheirQuantities = this.#parser.parse(
+    const chemicalElementsAndTheirQuantities: Record<string, number> = this.#parser.parse(
       this.#formula
     );
 

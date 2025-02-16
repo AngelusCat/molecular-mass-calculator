@@ -12,17 +12,18 @@ const routes: Record<string, Function> = {
 };
 
 const requestListener = (req: IncomingMessage, res: ServerResponse): void => {
-    const pathName = new URL(req.url, `http://${req.headers.host}`).pathname;
-    
-    if (routes[pathName]) {
-        routes[pathName](req,res);
+    if (req.url) {
+        const pathName: string = new URL(req.url, `http://${req.headers.host}`).pathname;
+        if (routes[pathName]) {
+            routes[pathName](req,res);
+        }
     } else {
         res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
         res.end(`<p>Страница не найдена.</p>`);
     }
 };
 
-const server = http.createServer(requestListener);
+const server: http.Server = http.createServer(requestListener);
 
 server.listen(3000, () => {
     console.log("Сервер запущен.")
