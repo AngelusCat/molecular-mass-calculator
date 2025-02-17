@@ -11,10 +11,10 @@ import { TYPES } from "../di/types.js";
 
 @injectable()
 export class MoleculeController {
-  #parser: MoleculeChemicalFormulaParser;
+  protected parser: MoleculeChemicalFormulaParser;
   
   constructor(@inject(TYPES.MoleculeChemicalFormulaParser) parser: MoleculeChemicalFormulaParser) {
-    this.#parser = parser;
+    this.parser = parser;
   }
   
   index(req: IncomingMessage, res: ServerResponse) {
@@ -46,7 +46,7 @@ export class MoleculeController {
         throw new InvalidStateException(`moleculeFromGetParameters не может быть null.`);
       }
 
-      const molecule: Molecule = new Molecule(this.#parser, moleculeFromGetParameters);
+      const molecule: Molecule = new Molecule(this.parser, moleculeFromGetParameters);
     
       res.writeHead(200, {"Content-type": "text/html"});
       res.end(`<p>${molecule.getFormula()}</p>`);
