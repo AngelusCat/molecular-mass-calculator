@@ -16,7 +16,8 @@ export class MoleculeController {
 
     fs.readFile(pathToHtmlTemplate, "utf-8", (err, data) => {
       if (err) {
-        //
+        res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
+        res.end(`<p>Страница не найдена.</p>`);
         return;
       }
 

@@ -1,5 +1,6 @@
-import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError.js";
-import { InvalidStringFormatError } from "../../exceptions/InvalidStringFormatError.js";
+import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError";
+import { InvalidStringFormatError } from "../../exceptions/InvalidStringFormatError";
+import { InvalidStateException } from "../../exceptions/InvalidStateException";
 
 export class MoleculeChemicalFormulaParser {
   /**
@@ -42,8 +43,19 @@ export class MoleculeChemicalFormulaParser {
       );
     }
 
-    const chemicalElement: string = chemicalElementWithIndex.match(/[A-Z][a-z]?/)[0];
-    const index: number = Number(chemicalElementWithIndex.match(/[1-9]{0,2}$/)[0] || 1);
+    const matchChemicalElement = chemicalElementWithIndex.match(/[A-Z][a-z]?/);
+    const matchIndex = chemicalElementWithIndex.match(/[1-9]{0,2}$/);
+
+    if (matchChemicalElement === null) {
+      throw new InvalidStateException(`matchChemicalElement не может быть null.`);
+    }
+
+    if (matchIndex === null) {
+      throw new InvalidStateException(`matchIndex не может быть null.`);
+    }
+
+    const chemicalElement: string = matchChemicalElement[0];
+    const index: number = Number(matchIndex[0] || 1);
 
     return {
       [chemicalElement]: index,
@@ -68,7 +80,7 @@ export class MoleculeChemicalFormulaParser {
       );
     }
 
-    let parsedData = {};
+    let parsedData: Record<string, number> = {};
 
     const parsingPattern = /[A-Z][a-z]?[1-9]?[0-9]?/g;
 
@@ -96,7 +108,7 @@ export class MoleculeChemicalFormulaParser {
    * @param {string} formula примеры: H2SO4(H2O)2, (N2O)3
    * @returns {object} примеры: H2SO4(H2O)2 -> {H:6, S:1, O:6}, (N2O)3 -> {N:6, O:3}
    */
-  #parseStringContainingParentheses(formula) {
+  #parseStringContainingParentheses(formula: string) {
     if (!formula) {
       throw new InvalidArgumentError(`'formula' не может быть пустой строкой.`);
     }
@@ -125,7 +137,7 @@ export class MoleculeChemicalFormulaParser {
           ? this.#parseStringEnclosedInParentheses(part[0])
           : this.#parseStringNotContainingParentheses(part[0]);
       })
-      .reduce((acc, obj) => {
+      .reduce<Record<string, number>>((acc, obj: Record<string, number>) => {
         for (const key in obj) {
           if (acc[key]) {
             acc[key] += obj[key];
@@ -142,7 +154,7 @@ export class MoleculeChemicalFormulaParser {
    * @param {string} formula примеры: (H2O)2 (часть от H2SO4(H2O)2)
    * @returns {object} примеры: (H2O)2 (часть от H2SO4(H2O)2) -> {H:4, O:2}
    */
-  #parseStringEnclosedInParentheses(formula) {
+  #parseStringEnclosedInParentheses(formula: string) {
     if (!formula) {
       throw new InvalidArgumentError(`'formula' не может быть пустой строкой.`);
     }
@@ -158,13 +170,18 @@ export class MoleculeChemicalFormulaParser {
     const parsingPattern = /\((.*?)\)(\d+)$/;
 
     const partsOfFormula = formula.match(parsingPattern);
+
+    if (partsOfFormula === null) {
+      throw new InvalidStateException(`partsOfFormula не может быть null.`);
+    }
+
     const contentsOfBrackets = partsOfFormula[1];
     const coefficient = Number(partsOfFormula[2]);
 
     /*
     (N2O)3 -> {N:2, O:1}
     */
-    let parsedData =
+    let parsedData: Record<string, number> =
       this.#parseStringNotContainingParentheses(contentsOfBrackets);
 
     /*
@@ -182,7 +199,7 @@ export class MoleculeChemicalFormulaParser {
    * @param {string} formula химическая формула молекулы
    * @returns {boolean}
    */
-  #stringMatchesExpectationsAboutItsStructure(formula) {
+  #stringMatchesExpectationsAboutItsStructure(formula: string) {
     if (!formula) {
       throw new InvalidArgumentError(`'formula' не может быть пустой строкой.`);
     }
