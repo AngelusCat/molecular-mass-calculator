@@ -1,10 +1,11 @@
 import http from "http";
 import { IncomingMessage, ServerResponse } from 'http';
 import { URL } from "url";
-
+import { container } from "./di/container.js";
 import { MoleculeController } from "./controllers/MoleculeController.js";
+import { TYPES } from "./di/types.js";
 
-const moleculeController: MoleculeController = new MoleculeController();
+const moleculeController: MoleculeController = container.get<MoleculeController>(TYPES.MoleculeController);
 
 const routes: Record<string, Function> = {
     '/index': moleculeController.index,

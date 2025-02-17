@@ -1,7 +1,9 @@
-import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError";
-import { InvalidStringFormatError } from "../../exceptions/InvalidStringFormatError";
-import { InvalidStateException } from "../../exceptions/InvalidStateException";
+import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError.js";
+import { InvalidStringFormatError } from "../../exceptions/InvalidStringFormatError.js";
+import { InvalidStateException } from "../../exceptions/InvalidStateException.js";
+import { injectable } from "inversify";
 
+@injectable()
 export class MoleculeChemicalFormulaParser {
   /**
    * парсит химическую формулу молекулы
