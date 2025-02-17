@@ -1,3 +1,5 @@
+import { inject, injectable } from "inversify";
+import { TYPES } from "../di/types.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -5,9 +7,7 @@ import { URL } from "url";
 import { IncomingMessage, ServerResponse } from "http";
 import { Molecule } from "../models/Molecule.js";
 import { MoleculeChemicalFormulaParser } from "../models/services/MoleculeChemicalFormulaParser.js";
-import { inject, injectable } from "inversify";
 import { InvalidStateException } from "../exceptions/InvalidStateException.js";
-import { TYPES } from "../di/types.js";
 
 @injectable()
 export class MoleculeController {
@@ -47,9 +47,10 @@ export class MoleculeController {
       }
 
       const molecule: Molecule = new Molecule(this.parser, moleculeFromGetParameters);
+      const molecularWeight: number = molecule.calculateMolecularWeight();
     
       res.writeHead(200, {"Content-type": "text/html"});
-      res.end(`<p>${molecule.getFormula()}</p>`);
+      res.end(`<p>Молекула: ${molecule.getFormula()}, ее молекулярная масса - ${molecularWeight}.</p>`);
     }
   }
 }

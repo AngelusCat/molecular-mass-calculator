@@ -1,9 +1,10 @@
+import { TYPES } from "./di/types.js";
+import "reflect-metadata";
+import { container } from "./di/container.js";
 import http from "http";
 import { IncomingMessage, ServerResponse } from 'http';
 import { URL } from "url";
-import { container } from "./di/container.js";
 import { MoleculeController } from "./controllers/MoleculeController.js";
-import { TYPES } from "./di/types.js";
 
 const moleculeController: MoleculeController = container.get<MoleculeController>(TYPES.MoleculeController);
 
