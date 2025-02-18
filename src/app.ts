@@ -9,8 +9,8 @@ import { MoleculeController } from "./controllers/MoleculeController.js";
 const moleculeController: MoleculeController = container.get<MoleculeController>(TYPES.MoleculeController);
 
 const routes: Record<string, Function> = {
-    '/index': moleculeController.index,
-    '/calculateMolecularWeight': moleculeController.calculateMolecularWeight
+    '/index': moleculeController.index.bind(moleculeController),
+    '/calculateMolecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController)
 };
 
 const requestListener = (req: IncomingMessage, res: ServerResponse): void => {

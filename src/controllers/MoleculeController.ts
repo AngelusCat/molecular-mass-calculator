@@ -49,7 +49,7 @@ export class MoleculeController {
       const molecule: Molecule = new Molecule(this.parser, moleculeFromGetParameters);
       const molecularWeight: number = molecule.calculateMolecularWeight();
     
-      res.writeHead(200, {"Content-type": "text/html"});
+      res.writeHead(200, {"Content-type": "text/html; charset=utf-8"});
       res.end(`<p>Молекула: ${molecule.getFormula()}, ее молекулярная масса - ${molecularWeight}.</p>`);
     }
   }
