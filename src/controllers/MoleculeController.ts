@@ -21,8 +21,7 @@ export class MoleculeController {
     const pathToHtmlTemplate = path.join(
       path.dirname(fileURLToPath(import.meta.url)),
       "..",
-      "resources",
-      "views",
+      "templates",
       "index.html"
     );
 
