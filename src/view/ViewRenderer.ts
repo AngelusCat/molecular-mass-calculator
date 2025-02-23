@@ -35,7 +35,7 @@ export class ViewRenderer {
                 if (!(variableName[1] in variables)) {
                     throw new InvalidArgumentError(`variables обязан содержать свойство ${variableName[1]}`);
                 }
-                return variables[variableName[1]];
+                return this.xssEscaper.escapeHtml(String(variables[variableName[1]]));
             } else {
                 return '';
             }
