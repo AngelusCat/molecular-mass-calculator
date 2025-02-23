@@ -8,19 +8,24 @@ import { IncomingMessage, ServerResponse } from "http";
 import { Molecule } from "../models/Molecule.js";
 import { MoleculeChemicalFormulaParser } from "../models/services/MoleculeChemicalFormulaParser.js";
 import { InvalidStateException } from "../exceptions/InvalidStateException.js";
+import { ViewRenderer } from "../view/ViewRenderer.js";
+
 
 @injectable()
 export class MoleculeController {
   protected parser: MoleculeChemicalFormulaParser;
+  protected viewRenderer: ViewRenderer;
   
-  constructor(@inject(TYPES.MoleculeChemicalFormulaParser) parser: MoleculeChemicalFormulaParser) {
+  constructor(@inject(TYPES.MoleculeChemicalFormulaParser) parser: MoleculeChemicalFormulaParser, @inject(TYPES.ViewRenderer) viewRenderer: ViewRenderer) {
     this.parser = parser;
+    this.viewRenderer = viewRenderer;
   }
   
   index(req: IncomingMessage, res: ServerResponse) {
     const pathToHtmlTemplate = path.join(
       path.dirname(fileURLToPath(import.meta.url)),
       "..",
+      "resources",
       "templates",
       "index.html"
     );
@@ -37,7 +42,7 @@ export class MoleculeController {
     });
   }
 
-  calculateMolecularWeight(req: IncomingMessage, res: ServerResponse) {
+  async calculateMolecularWeight(req: IncomingMessage, res: ServerResponse) {
     if (req.url) {
       const moleculeFromGetParameters: string|null = new URL(req.url, `http://${req.headers.host}`).searchParams.get("molecule");
 
@@ -49,7 +54,9 @@ export class MoleculeController {
       const molecularWeight: number = molecule.calculateMolecularWeight();
     
       res.writeHead(200, {"Content-type": "text/html; charset=utf-8"});
-      res.end(`<p>Молекула: ${molecule.getFormula()}, ее молекулярная масса - ${molecularWeight}.</p>`);
+      //res.end(`<p>Молекула: ${molecule.getFormula()}, ее молекулярная масса - ${molecularWeight}.</p>`);
+      const renderedTemplate = await this.viewRenderer.render("molecule", {molecule: molecule.getFormula(), molecularWeight: molecularWeight});
+      res.end(renderedTemplate);
     }
   }
 }

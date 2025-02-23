@@ -3,8 +3,18 @@ import { template_path } from "../helpers/paths.js";
 import path from "path";
 import { FileReadError } from "../exceptions/FileReadError.js";
 import { InvalidArgumentError } from "../exceptions/InvalidArgumentError.js";
+import { XssEscaper } from "./XssEscaper.js";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../di/types.js";
 
+@injectable()
 export class ViewRenderer {
+    protected xssEscaper: XssEscaper;
+    
+    constructor(@inject(TYPES.XssEscaper) xssEscaper: XssEscaper) {
+        this.xssEscaper = xssEscaper;
+    }
+    
     /**
      * рендерит html шаблон
      * @param {string} templateName имя шаблона без расширения (ожидается, что данный шаблон хранится с расширением .html), пример: шаблон хранится в resources/templates/index.html -> templateName будет index
@@ -52,9 +62,10 @@ export class ViewRenderer {
     }
 }
 
-
+/* TEST
 let renderer = new ViewRenderer();
 
 for (let template of ["test"]) {
-    console.log(await renderer.render(template, {name: "Anon"}));
+    console.log(await renderer.render(template, {name: "Anon", animal: "cat"}));
 }
+ */
