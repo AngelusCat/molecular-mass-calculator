@@ -6,6 +6,7 @@ import { MoleculeController } from "../controllers/MoleculeController.js";
 import { XssEscaper } from "../view/XssEscaper.js";
 import { ViewRenderer } from "../view/ViewRenderer.js";
 import { BaseController } from "../controllers/BaseController.js";
+import { FileReader } from "../fileSystem/FileReader.js";
 
 const container = new Container();
 
@@ -14,5 +15,6 @@ container.bind<MoleculeController>(TYPES.MoleculeController).to(MoleculeControll
 container.bind<XssEscaper>(TYPES.XssEscaper).to(XssEscaper);
 container.bind<ViewRenderer>(TYPES.ViewRenderer).to(ViewRenderer);
 container.bind<BaseController>(TYPES.BaseController).to(BaseController);
+container.bind<FileReader>(TYPES.FileReader).to(FileReader);
 
 export {container};

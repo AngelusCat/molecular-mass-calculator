@@ -1,7 +1,7 @@
 import fs from "fs";
 import { template_path } from "../helpers/paths.js";
 import path from "path";
-import { FileReadError } from "../exceptions/FileReadError.js";
+import { FileReader } from "../fileSystem/FileReader.js";
 import { InvalidArgumentError } from "../exceptions/InvalidArgumentError.js";
 import { XssEscaper } from "./XssEscaper.js";
 import { inject, injectable } from "inversify";
@@ -10,9 +10,11 @@ import { TYPES } from "../di/types.js";
 @injectable()
 export class ViewRenderer {
     protected xssEscaper: XssEscaper;
+    protected fileReader: FileReader;
     
-    constructor(@inject(TYPES.XssEscaper) xssEscaper: XssEscaper) {
+    constructor(@inject(TYPES.XssEscaper) xssEscaper: XssEscaper, @inject(TYPES.FileReader) fileReader: FileReader) {
         this.xssEscaper = xssEscaper;
+        this.fileReader = fileReader;
     }
     
     /**
@@ -47,18 +49,9 @@ export class ViewRenderer {
      * @param {string} fileName имя шаблона без расширения (ожидается, что данный шаблон хранится с расширением .html), пример: шаблон хранится в resources/templates/index.html -> fileName будет index
      * @returns {Promise} html шаблон в виде строки
      */
-    private readTemplate(fileName: string): Promise<string> {
+    private async readTemplate(fileName: string): Promise<string> {
         let pathToFile = path.join(template_path(), fileName + ".html");
-
-        return new Promise((resolve, reject) => {
-            fs.readFile(pathToFile, 'utf8', (err, data) => {
-                if (err) {
-                    reject(new FileReadError(`Не удалось прочитать файл ${pathToFile}: ${err.message}.`));
-                } else {
-                    resolve(data);
-                }
-            });
-        });
+        return await this.fileReader.read(pathToFile);
     }
 }
 
