@@ -5,23 +5,27 @@ import http from "http";
 import { IncomingMessage, ServerResponse } from 'http';
 import { URL } from "url";
 import { MoleculeController } from "./controllers/MoleculeController.js";
+import { ViewRenderer } from "./view/ViewRenderer.js";
+import { BaseController } from "./controllers/BaseController.js";
 
 const moleculeController: MoleculeController = container.get<MoleculeController>(TYPES.MoleculeController);
+const baseController: BaseController = container.get<BaseController>(TYPES.BaseController);
 
 const routes: Record<string, Function> = {
     '/index': moleculeController.index.bind(moleculeController),
     '/calculateMolecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController)
 };
 
-const requestListener = (req: IncomingMessage, res: ServerResponse): void => {
+const requestListener = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     if (req.url) {
         const pathName: string = new URL(req.url, `http://${req.headers.host}`).pathname;
         if (routes[pathName]) {
             routes[pathName](req,res);
+        } else {
+           baseController.sendHtmlResponse(res, 404, "404");
         }
     } else {
-        res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
-        res.end(`<p>Страница не найдена.</p>`);
+        baseController.sendHtmlResponse(res, 404, "404");
     }
 };
 

@@ -5,6 +5,7 @@ import { MoleculeChemicalFormulaParser } from "../models/services/MoleculeChemic
 import { MoleculeController } from "../controllers/MoleculeController.js";
 import { XssEscaper } from "../view/XssEscaper.js";
 import { ViewRenderer } from "../view/ViewRenderer.js";
+import { BaseController } from "../controllers/BaseController.js";
 
 const container = new Container();
 
@@ -12,5 +13,6 @@ container.bind<MoleculeChemicalFormulaParser>(TYPES.MoleculeChemicalFormulaParse
 container.bind<MoleculeController>(TYPES.MoleculeController).to(MoleculeController);
 container.bind<XssEscaper>(TYPES.XssEscaper).to(XssEscaper);
 container.bind<ViewRenderer>(TYPES.ViewRenderer).to(ViewRenderer);
+container.bind<BaseController>(TYPES.BaseController).to(BaseController);
 
 export {container};

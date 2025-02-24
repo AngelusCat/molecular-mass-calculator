@@ -1,45 +1,27 @@
 import { inject, injectable } from "inversify";
 import { TYPES } from "../di/types.js";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { container } from "../di/container.js";
 import { URL } from "url";
 import { IncomingMessage, ServerResponse } from "http";
 import { Molecule } from "../models/Molecule.js";
 import { MoleculeChemicalFormulaParser } from "../models/services/MoleculeChemicalFormulaParser.js";
 import { InvalidStateException } from "../exceptions/InvalidStateException.js";
 import { ViewRenderer } from "../view/ViewRenderer.js";
-
+import { BaseController } from "./BaseController.js";
 
 @injectable()
-export class MoleculeController {
+export class MoleculeController extends BaseController {
   protected parser: MoleculeChemicalFormulaParser;
   protected viewRenderer: ViewRenderer;
   
   constructor(@inject(TYPES.MoleculeChemicalFormulaParser) parser: MoleculeChemicalFormulaParser, @inject(TYPES.ViewRenderer) viewRenderer: ViewRenderer) {
+    super(container.get<ViewRenderer>(TYPES.ViewRenderer));
     this.parser = parser;
     this.viewRenderer = viewRenderer;
   }
   
-  index(req: IncomingMessage, res: ServerResponse) {
-    const pathToHtmlTemplate = path.join(
-      path.dirname(fileURLToPath(import.meta.url)),
-      "..",
-      "resources",
-      "templates",
-      "index.html"
-    );
-
-    fs.readFile(pathToHtmlTemplate, "utf-8", (err, data) => {
-      if (err) {
-        res.writeHead(404, {"Content-Type": "text/html; charset=utf-8"});
-        res.end(`<p>Страница не найдена.</p>`);
-        return;
-      }
-
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(data);
-    });
+  async index(req: IncomingMessage, res: ServerResponse) {
+    this.sendHtmlResponse(res, 200, "index");
   }
 
   async calculateMolecularWeight(req: IncomingMessage, res: ServerResponse) {
@@ -53,10 +35,7 @@ export class MoleculeController {
       const molecule: Molecule = new Molecule(this.parser, moleculeFromGetParameters);
       const molecularWeight: number = molecule.calculateMolecularWeight();
     
-      res.writeHead(200, {"Content-type": "text/html; charset=utf-8"});
-      //res.end(`<p>Молекула: ${molecule.getFormula()}, ее молекулярная масса - ${molecularWeight}.</p>`);
-      const renderedTemplate = await this.viewRenderer.render("molecule", {molecule: molecule.getFormula(), molecularWeight: molecularWeight});
-      res.end(renderedTemplate);
+      this.sendHtmlResponse(res, 200, "molecule", {molecule: molecule.getFormula(), molecularWeight: molecularWeight});
     }
   }
 }
