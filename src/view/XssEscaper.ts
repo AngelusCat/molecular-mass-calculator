@@ -4,18 +4,18 @@ import { InvalidArgumentError } from "../exceptions/InvalidArgumentError.js";
 @injectable()
 export class XssEscaper {
     /**
-     * Экранирует значение переменной, которая используется в html шаблоне (контексты: html содержимое и html атрибуты)
+     * Экранирует значение переменной, которая используется в html шаблоне (контексты: html содержимое и html атрибуты; использует по умолчанию двойное кодирование)
      * @param {string} suspiciousValue значение переменной, которая используется в html шаблоне
      * @returns {string} экранированое значение переменной, которая используется в html шаблоне
      */
-    escapeHtml(suspiciousValue: string): string {
+    escapeHtml(suspiciousValue: string, doubleEncode: boolean = true): string {
         const unsafeCharactersPattern = /[&<>"']/g;
 
         if (typeof suspiciousValue !== "string") {
             throw new InvalidArgumentError(`suspiciousValue должен быть строкой.`);
         }
 
-        return suspiciousValue.replace(unsafeCharactersPattern, (unsafeCharacter) => {
+        let escaped = suspiciousValue.replace(unsafeCharactersPattern, (unsafeCharacter) => {
             switch(unsafeCharacter) {
                 case '&':
                     return '&amp;';
@@ -31,5 +31,6 @@ export class XssEscaper {
                     return unsafeCharacter;
             }
         });
+        return doubleEncode ? this.escapeHtml(escaped, false) : escaped;
     }
 }
