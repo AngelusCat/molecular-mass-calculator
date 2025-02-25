@@ -5,7 +5,6 @@ import http from "http";
 import { IncomingMessage, ServerResponse } from 'http';
 import { URL } from "url";
 import { MoleculeController } from "./controllers/MoleculeController.js";
-import { ViewRenderer } from "./view/ViewRenderer.js";
 import { BaseController } from "./controllers/BaseController.js";
 
 const moleculeController: MoleculeController = container.get<MoleculeController>(TYPES.MoleculeController);
