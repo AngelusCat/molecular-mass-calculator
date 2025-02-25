@@ -1,4 +1,5 @@
 import { ValidationRule } from "../interfaces/ValidationRule";
+import { ValidationErrorList } from "./ValidationErrorList";
 
 export class Validator {
     private rules: Record<string, Array<ValidationRule>>;
@@ -7,7 +8,9 @@ export class Validator {
         this.rules = rules;
     }
 
-    validate() {
-        //
+    validate(validationTarget: Record<string, any>): ValidationErrorList {
+        const validationErrorList = new ValidationErrorList();
+
+        return validationErrorList;
     }
 }
