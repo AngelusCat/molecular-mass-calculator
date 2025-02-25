@@ -8,6 +8,7 @@ export class MaxLineLength implements ValidationRule {
      * @param {string} fieldName имя поля формы, которое подвергается проверке
      * @param {string} value 
      * @param {{max: number}} validationDetails максимальное количество символов, больше которого строка не должна содержать
+     * @returns {ValidationError|null} значение не соответствует правилу валидации -> ValidationError, соответствует -> null
      */
     validate(fieldName: string, value: string, validationDetails: {max: number}): ValidationError | null {
         if (!('max' in validationDetails)) {
@@ -28,6 +29,6 @@ export class MaxLineLength implements ValidationRule {
 
         const charCount = Array.from(value).length;
 
-        return charCount > validationDetails.max ? new ValidationError(``) : null;
+        return charCount > validationDetails.max ? new ValidationError(`Количество символов в строке (поле ${fieldName}) должно быть не больше ${validationDetails.max}, у вас - ${charCount}.`) : null;
     }
 }

@@ -8,6 +8,7 @@ export class MinLineLength implements ValidationRule {
      * @param {string} fieldName имя поля формы, которое подвергается проверке
      * @param {string} value 
      * @param {{min: number}} validationDetails минимальное количество символов, которое должна содержать строка
+     * @returns {ValidationError|null} значение не соответствует правилу валидации -> ValidationError, соответствует -> null
      */
     validate(fieldName: string, value: string, validationDetails: {min: number}): ValidationError | null {
         if (!('min' in validationDetails)) {
@@ -28,6 +29,6 @@ export class MinLineLength implements ValidationRule {
 
         const charCount = Array.from(value).length;
 
-        return charCount < validationDetails.min ? new ValidationError(``) : null;
+        return charCount < validationDetails.min ? new ValidationError(`Количество символов в строке (поле ${fieldName}) должно быть не меньше ${validationDetails.min}, у вас - ${charCount}.`) : null;
     }
 }
