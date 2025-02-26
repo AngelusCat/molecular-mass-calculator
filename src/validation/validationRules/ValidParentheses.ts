@@ -1,12 +1,22 @@
+import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError.js";
 import { ValidationRule } from "../../interfaces/ValidationRule.js";
 import { ValidationError } from "../ValidationError.js";
 
 export class ValidParentheses implements ValidationRule {
+  /**
+   * Проверяет, что круглые скобки идут в правильном порядке (открывающая предшествует закрывающей) и что все скобки закрыты
+   * @param {string} value строка, которая потенциально может содержать круглые скобки
+   * @param {object} validationDetails дополнительная информация, чтобы осуществить проверку (в этой проверке не используется)
+   * @returns {ValidationError|null} значение проходит проверку -> возвращает null; не проходит - ValidationError 
+   */
   validate(
-    fieldName: string,
-    value: any,
+    value: string,
     validationDetails: Record<string, any> = {}
   ): ValidationError | null {
+    if (typeof value !== "string") {
+        throw new InvalidArgumentError(`value обязан быть строкой.`);
+    }
+    
     return this.parenthesesAreInCorrectOrder(value);
   }
 
@@ -58,9 +68,8 @@ export class ValidParentheses implements ValidationRule {
 
 /* TEST
 const validParentheses = new ValidParentheses();
-const fieldName = "test";
-for (let value of ["H2SO4", "H2(O)2", ")H2", "(H2", "((H2", ")H2(("]) {
-  let errors = validParentheses.validate(fieldName, value);
+for (let value of ["H2SO4", "H2(O)2", ")H2", "(H2", "((H2", ")H2((", ""]) {
+  let errors = validParentheses.validate(value);
   if (errors) {
     console.log(`Значение: ${value}, ошибки: ${errors.getMessage()}`);
   }
