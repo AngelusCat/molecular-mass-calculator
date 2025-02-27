@@ -1,4 +1,3 @@
-import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError.js";
 import { correctType } from "../../helpers/argumentChecks.js";
 import { ValidationRule } from "../../interfaces/ValidationRule.js";
 import { ValidationError } from "../ValidationError.js";

@@ -1,6 +1,7 @@
 import { ValidationRule } from "../../interfaces/ValidationRule.js";
 import { ValidationError } from "../ValidationError.js";
 import { BaseValidationRule } from "../BaseValidationRule.js";
+import { correctType } from "../../helpers/argumentChecks.js";
 
 export class MaxLineLength extends BaseValidationRule implements ValidationRule {
     /**
@@ -10,8 +11,8 @@ export class MaxLineLength extends BaseValidationRule implements ValidationRule 
      * @returns {ValidationError|null} значение не соответствует правилу валидации -> ValidationError, соответствует -> null
      */
     validate(value: string, validationDetails: {max: number, fieldName: string}): ValidationError | null {
-        const data = {max: "number", fieldName: "string"};
-        this.checkValidationDetails(validationDetails, data);
+        correctType(value, "string", "value");
+        this.checkValidationDetails(validationDetails, {max: "number", fieldName: "string"});
 
         const charCount = Array.from(value).length;
 

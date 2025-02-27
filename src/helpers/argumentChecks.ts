@@ -22,10 +22,24 @@ export function keyIsInObject(key: string, obj: Record<string, any>, variableNam
  * @returns {void} выдает исключение в случае непрохождения проверки
  */
 export function correctType(value: any, type: string, variableName: string): void {
-    if (typeof value !== type) {
-        throw new InvalidArgumentError(`${variableName} обязан иметь тип ${type}.`);
+    const primitives = new Set(["string", "number", "boolean", "bigint", "symbol", "undefined", "function"]);
+
+    if (primitives.has(type)) {
+        if (typeof value !== type) {
+            throw new InvalidArgumentError(`${variableName} обязан иметь тип ${type}.`);
+        }
+        return;
     }
-    return;
+
+    const constructor = (globalThis as Record<string, any>)[type];
+    
+    if (!constructor) {
+        throw new InvalidArgumentError(`Неизвестный тип: ${type}.`);
+    }
+
+    if (!(value instanceof constructor)) {
+        throw new InvalidArgumentError(`${variableName} обязан быть экземпляром ${type}.`);
+    }
 }
 
 /**
