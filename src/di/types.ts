@@ -4,5 +4,6 @@ export const TYPES = {
     XssEscaper: Symbol.for("XssEscaper"),
     ViewRenderer: Symbol.for("ViewRenderer"),
     BaseController: Symbol.for("BaseController"),
-    FileReader: Symbol.for("FileReader")
+    FileReader: Symbol.for("FileReader"),
+    FormulaValidator: Symbol.for("FormulaValidator")
 };
