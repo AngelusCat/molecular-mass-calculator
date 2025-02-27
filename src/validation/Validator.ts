@@ -1,7 +1,9 @@
+import { injectable } from "inversify";
 import { ValidationRule } from "../interfaces/ValidationRule.js";
 import { ValidationError } from "./ValidationError.js";
 import { ValidationErrorList } from "./ValidationErrorList.js";
 
+@injectable()
 export class Validator {
     /**
      * @property {object} rules

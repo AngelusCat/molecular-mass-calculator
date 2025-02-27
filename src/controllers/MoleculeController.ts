@@ -8,16 +8,19 @@ import { MoleculeChemicalFormulaParser } from "../models/services/MoleculeChemic
 import { InvalidStateException } from "../exceptions/InvalidStateException.js";
 import { ViewRenderer } from "../view/ViewRenderer.js";
 import { BaseController } from "./BaseController.js";
+import { Validator } from "../validation/Validator.js";
 
 @injectable()
 export class MoleculeController extends BaseController {
   protected parser: MoleculeChemicalFormulaParser;
   protected viewRenderer: ViewRenderer;
+  protected validator: Validator;
   
-  constructor(@inject(TYPES.MoleculeChemicalFormulaParser) parser: MoleculeChemicalFormulaParser, @inject(TYPES.ViewRenderer) viewRenderer: ViewRenderer) {
+  constructor(@inject(TYPES.MoleculeChemicalFormulaParser) parser: MoleculeChemicalFormulaParser, @inject(TYPES.ViewRenderer) viewRenderer: ViewRenderer, @inject(TYPES.FormulaValidator) validator: Validator) {
     super(container.get<ViewRenderer>(TYPES.ViewRenderer));
     this.parser = parser;
     this.viewRenderer = viewRenderer;
+    this.validator = validator;
   }
   
   async index(req: IncomingMessage, res: ServerResponse) {
@@ -33,6 +36,13 @@ export class MoleculeController extends BaseController {
       }
 
       const molecule: Molecule = new Molecule(this.parser, moleculeFromGetParameters);
+
+      const listOfValidationErrors = this.validator.validate(molecule);
+
+      if (!(listOfValidationErrors.isEmpty())) {
+        this.sendHtmlResponse(res, 400, "molecule", {molecule: molecule.getFormula(), molecularWeight: ""});
+      }
+
       const molecularWeight: number = molecule.calculateMolecularWeight();
     
       this.sendHtmlResponse(res, 200, "molecule", {molecule: molecule.getFormula(), molecularWeight: molecularWeight});
