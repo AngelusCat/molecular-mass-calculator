@@ -1,4 +1,4 @@
-import { keyIsInObject, notEmptyValue, correctType } from "../helpers/argumentChecks";
+import { keyIsInObject, notEmptyValue, correctType } from "../helpers/argumentChecks.js";
 
 export class BaseValidationRule {
     /**
