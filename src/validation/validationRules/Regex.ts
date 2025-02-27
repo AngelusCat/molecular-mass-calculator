@@ -1,7 +1,6 @@
 import { ValidationRule } from "../../interfaces/ValidationRule.js";
 import { ValidationError } from "../ValidationError.js";
 import { BaseValidationRule } from "../BaseValidationRule.js";
-import { notEmptyValue } from "../../helpers/argumentChecks.js";
 
 export class Regex extends BaseValidationRule implements ValidationRule {
     private validationDetails: {fieldName: string, pattern: RegExp, stringStructureHint: string};
@@ -22,8 +21,6 @@ export class Regex extends BaseValidationRule implements ValidationRule {
      * @returns {ValidationError|null} значение проходит проверку -> возвращает null; не проходит - ValidationError
      */
     validate(value: string): ValidationError | null {
-        notEmptyValue(value, "value");
-        
         return this.validationDetails.pattern.test(value) ? null : new ValidationError(`Значение поля ${this.validationDetails.fieldName} должно иметь следующую структуру: ${this.validationDetails.stringStructureHint}`);
     }
 }

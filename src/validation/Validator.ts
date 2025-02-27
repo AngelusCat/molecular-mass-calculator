@@ -2,6 +2,7 @@ import { injectable } from "inversify";
 import { ValidationRule } from "../interfaces/ValidationRule.js";
 import { ValidationError } from "./ValidationError.js";
 import { ValidationErrorList } from "./ValidationErrorList.js";
+import { NotBlank } from "./validationRules/NotBlank.js";
 
 @injectable()
 export class Validator {
@@ -31,7 +32,7 @@ export class Validator {
 
             let value = (fieldName in validationTarget) ? validationTarget[fieldName] : (getterName in validationTarget) ? validationTarget[getterName]() : null;
 
-            if (!value) {
+            if (value === null) {
                 continue;
             }
 

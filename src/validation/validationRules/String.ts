@@ -1,7 +1,6 @@
 import { ValidationRule } from "../../interfaces/ValidationRule.js";
 import { ValidationError } from "../ValidationError.js";
 import { BaseValidationRule } from "../BaseValidationRule.js";
-import { notEmptyValue } from "../../helpers/argumentChecks.js";
 
 export class String extends BaseValidationRule implements ValidationRule {
     private validationDetails: {fieldName: string};
@@ -22,8 +21,6 @@ export class String extends BaseValidationRule implements ValidationRule {
      * @returns {ValidationError|null} значение не соответствует правилу валидации -> ValidationError, соответствует -> null
      */
     validate(value: any): ValidationError | null {
-        notEmptyValue(value, "value");
-        
         return typeof value !== "string" ? new ValidationError(`Поле ${this.validationDetails.fieldName} должно быть строкой.`) : null;
     }
 }
