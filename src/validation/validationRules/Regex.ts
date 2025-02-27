@@ -1,18 +1,26 @@
 import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError.js";
 import { ValidationRule } from "../../interfaces/ValidationRule.js";
 import { ValidationError } from "../ValidationError.js";
+import { BaseValidationRule } from "../BaseValidationRule.js";
+import { notEmptyValue } from "../../helpers/argumentChecks.js";
 
-export class Regex implements ValidationRule {
+export class Regex extends BaseValidationRule implements ValidationRule {
     validate(value: string, validationDetails: {fieldName: string, pattern: RegExp, stringStructureHint: string}): ValidationError | null {
+        notEmptyValue(value, "value");
+        this.checkValidationDetails(validationDetails, {fieldName: "string", pattern: "RegExp", stringStructureHint: "string"});
+        
+        /*
         if (typeof value !== "string") {
             throw new InvalidArgumentError(`value обязан быть строкой.`);
         }
 
         this.checkValidationDetails(validationDetails);
+        */
         
         return validationDetails.pattern.test(value) ? null : new ValidationError(`Значение поля ${validationDetails.fieldName} должно иметь следующую структуру: ${validationDetails.stringStructureHint}`);
     }
 
+    /*
     private checkValidationDetails(validationDetails: {fieldName: string, pattern: RegExp, stringStructureHint: string}): void {
         if (!('fieldName' in validationDetails)) {
             throw new InvalidArgumentError(`validationDetails обязан иметь ключ fieldName.`);
@@ -50,4 +58,5 @@ export class Regex implements ValidationRule {
             throw new InvalidArgumentError(`validationDetails.stringStructureHint не может быть пустой строкой.`);
         }
     }
+        */
 }

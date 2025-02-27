@@ -1,6 +1,8 @@
 import { InvalidArgumentError } from "../../exceptions/InvalidArgumentError.js";
+import { correctType } from "../../helpers/argumentChecks.js";
 import { ValidationRule } from "../../interfaces/ValidationRule.js";
 import { ValidationError } from "../ValidationError.js";
+
 
 export class ValidParentheses implements ValidationRule {
   /**
@@ -13,9 +15,7 @@ export class ValidParentheses implements ValidationRule {
     value: string,
     validationDetails: Record<string, any> = {}
   ): ValidationError | null {
-    if (typeof value !== "string") {
-        throw new InvalidArgumentError(`value обязан быть строкой.`);
-    }
+    correctType(value, "string", "value");
     
     return this.parenthesesAreInCorrectOrder(value);
   }
