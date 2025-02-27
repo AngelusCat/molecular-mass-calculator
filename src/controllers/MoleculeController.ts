@@ -40,7 +40,7 @@ export class MoleculeController extends BaseController {
       const listOfValidationErrors = this.validator.validate(molecule);
 
       if (!(listOfValidationErrors.isEmpty())) {
-        this.sendHtmlResponse(res, 400, "molecule", {molecule: molecule.getFormula(), molecularWeight: ""});
+        this.sendHtmlResponse(res, 400, "index", {molecule: molecule.getFormula(), validationErrorMessage: `Неправильно введены данные формы. Ошибки: ${listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' ')}.`});
       }
 
       const molecularWeight: number = molecule.calculateMolecularWeight();

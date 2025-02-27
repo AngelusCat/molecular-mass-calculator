@@ -1,7 +1,7 @@
 import { ValidationRule } from "../../interfaces/ValidationRule.js";
 import { ValidationError } from "../ValidationError.js";
 import { BaseValidationRule } from "../BaseValidationRule.js";
-import { correctType } from "../../helpers/argumentChecks";
+import { correctType } from "../../helpers/argumentChecks.js";
 
 export class NotBlank extends BaseValidationRule implements ValidationRule {
     private validationDetails: {fieldName: string};
