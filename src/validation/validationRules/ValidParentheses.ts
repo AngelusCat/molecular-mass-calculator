@@ -7,12 +7,10 @@ export class ValidParentheses implements ValidationRule {
   /**
    * Проверяет, что круглые скобки идут в правильном порядке (открывающая предшествует закрывающей) и что все скобки закрыты
    * @param {string} value строка, которая потенциально может содержать круглые скобки
-   * @param {object} validationDetails дополнительная информация, чтобы осуществить проверку (в этой проверке не используется)
    * @returns {ValidationError|null} значение проходит проверку -> возвращает null; не проходит - ValidationError 
    */
   validate(
-    value: string,
-    validationDetails: Record<string, any> = {}
+    value: string
   ): ValidationError | null {
     correctType(value, "string", "value");
     

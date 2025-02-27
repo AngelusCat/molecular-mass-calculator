@@ -1,5 +1,6 @@
 import { injectable } from "inversify";
 import { InvalidArgumentError } from "../exceptions/InvalidArgumentError.js";
+import { correctType } from "../helpers/argumentChecks.js";
 
 @injectable()
 export class XssEscaper {
@@ -11,9 +12,7 @@ export class XssEscaper {
     escapeHtml(suspiciousValue: string, doubleEncode: boolean = true): string {
         const unsafeCharactersPattern = /[&<>"']/g;
 
-        if (typeof suspiciousValue !== "string") {
-            throw new InvalidArgumentError(`suspiciousValue должен быть строкой.`);
-        }
+        correctType(suspiciousValue, "string", "suspiciousValue");
 
         let escaped = suspiciousValue.replace(unsafeCharactersPattern, (unsafeCharacter) => {
             switch(unsafeCharacter) {

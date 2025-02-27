@@ -11,6 +11,18 @@ export class Validator {
     validate(validationTarget: Record<string, any>): ValidationErrorList {
         const validationErrorList = new ValidationErrorList();
 
+        for (let fieldName in this.rules) {
+            let getterName = "get" + fieldName.charAt(0).toUpperCase() + fieldName.slice(1).toLowerCase();
+
+            if (!(getterName in validationTarget)) {
+                continue;
+            }
+
+            this.rules[fieldName].forEach((validationRule) => {
+                
+            });
+        }
+
         return validationErrorList;
     }
 }
