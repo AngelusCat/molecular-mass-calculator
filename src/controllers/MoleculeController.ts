@@ -24,7 +24,7 @@ export class MoleculeController extends BaseController {
   }
   
   async index(req: IncomingMessage, res: ServerResponse) {
-    this.sendHtmlResponse(res, 200, "index", {molecule: " ", validationErrorMessage: " "});
+    this.sendHtmlResponse(res, 200, "index", {molecule: " ", validationErrorMessages: " ", validationErrorMessageText: " "});
   }
 
   async calculateMolecularWeight(req: IncomingMessage, res: ServerResponse) {
@@ -40,7 +40,7 @@ export class MoleculeController extends BaseController {
       const listOfValidationErrors = this.validator.validate(molecule);
 
       if (!(listOfValidationErrors.isEmpty())) {
-        await this.sendHtmlResponse(res, 200, "index", {molecule: molecule.getFormula(), validationErrorMessage: `Неправильно введены данные формы. Ошибки: ${listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' ')}`});
+        await this.sendHtmlResponse(res, 200, "index", {molecule: molecule.getFormula(), validationErrorMessages: listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' '), validationErrorMessageText: "Неправильно введены данные формы. Ошибки: "});
         return;
       }
 
