@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "inversify": "^6.2.2",
+    "ioredis": "^5.5.0",
     "reflect-metadata": "^0.2.2"
   }
 }
