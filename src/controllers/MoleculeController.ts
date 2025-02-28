@@ -10,6 +10,8 @@ import { ViewRenderer } from "../view/ViewRenderer.js";
 import { BaseController } from "./BaseController.js";
 import { Validator } from "../validation/Validator.js";
 import { Cache } from "../interfaces/Cache.js";
+import { ApiResponse } from "../api/ApiResponse.js";
+import { Status } from "../api/Status.js";
 
 @injectable()
 export class MoleculeController extends BaseController {
@@ -43,8 +45,12 @@ export class MoleculeController extends BaseController {
       const listOfValidationErrors = this.validator.validate(molecule);
 
       if (!(listOfValidationErrors.isEmpty())) {
-        await this.sendHtmlResponse(res, 200, "index", {molecule: molecule.getFormula(), validationErrorMessages: listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' '), validationErrorMessageText: "Неправильно введены данные формы. Ошибки: "});
+        this.thisIsApiRequest(req) ? this.sendJsonResponse(res, 400, new ApiResponse(Status.ERROR, {}, "Ошибки валидации.", {})) : await this.sendHtmlResponse(res, 400, "index", {molecule: molecule.getFormula(), validationErrorMessages: listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' '), validationErrorMessageText: "Неправильно введены данные формы. Ошибки: "});
         return;
+        /*
+        await this.sendHtmlResponse(res, 400, "index", {molecule: molecule.getFormula(), validationErrorMessages: listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' '), validationErrorMessageText: "Неправильно введены данные формы. Ошибки: "});
+        return;
+        */
       }
 
       const molecularWeightFromCache = await this.cache.get(molecule.getFormula());
@@ -57,7 +63,7 @@ export class MoleculeController extends BaseController {
         this.cache.set(molecule.getFormula(), String(molecularWeight));
       }
 
-      this.sendHtmlResponse(res, 200, "molecule", {molecule: molecule.getFormula(), molecularWeight: molecularWeight});
+      this.thisIsApiRequest(req) ? this.sendJsonResponse(res, 200, new ApiResponse(Status.SUCCESS, {molecularWeight: molecularWeight}, `Получена молекулярная масса ${molecule.getFormula()}.`, {})) : await this.sendHtmlResponse(res, 200, "molecule", {molecule: molecule.getFormula(), molecularWeight: molecularWeight});
     }
   }
 }
