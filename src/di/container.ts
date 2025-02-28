@@ -14,6 +14,8 @@ import { MinLineLength } from "../validation/validationRules/MinLineLength.js";
 import { MaxLineLength } from "../validation/validationRules/MaxLineLength.js";
 import { Regex } from "../validation/validationRules/Regex.js";
 import { ValidParentheses } from "../validation/validationRules/ValidParentheses.js";
+import { RedisCache } from "../cache/RedisCache.js";
+import { Cache } from "../interfaces/Cache.js";
 
 const container = new Container();
 
@@ -48,5 +50,7 @@ container.bind<Validator>(TYPES.FormulaValidator).toDynamicValue(() => {
     ],
   });
 });
+
+container.bind<Cache>(TYPES.RedisCache).to(RedisCache);
 
 export { container };

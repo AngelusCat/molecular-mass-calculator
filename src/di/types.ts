@@ -5,5 +5,6 @@ export const TYPES = {
     ViewRenderer: Symbol.for("ViewRenderer"),
     BaseController: Symbol.for("BaseController"),
     FileReader: Symbol.for("FileReader"),
-    FormulaValidator: Symbol.for("FormulaValidator")
+    FormulaValidator: Symbol.for("FormulaValidator"),
+    RedisCache: Symbol.for("RedisCache")
 };

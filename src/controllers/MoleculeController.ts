@@ -9,18 +9,21 @@ import { InvalidStateException } from "../exceptions/InvalidStateException.js";
 import { ViewRenderer } from "../view/ViewRenderer.js";
 import { BaseController } from "./BaseController.js";
 import { Validator } from "../validation/Validator.js";
+import { Cache } from "../interfaces/Cache.js";
 
 @injectable()
 export class MoleculeController extends BaseController {
   protected parser: MoleculeChemicalFormulaParser;
   protected viewRenderer: ViewRenderer;
   protected validator: Validator;
+  protected cache: Cache;
   
-  constructor(@inject(TYPES.MoleculeChemicalFormulaParser) parser: MoleculeChemicalFormulaParser, @inject(TYPES.ViewRenderer) viewRenderer: ViewRenderer, @inject(TYPES.FormulaValidator) validator: Validator) {
+  constructor(@inject(TYPES.MoleculeChemicalFormulaParser) parser: MoleculeChemicalFormulaParser, @inject(TYPES.ViewRenderer) viewRenderer: ViewRenderer, @inject(TYPES.FormulaValidator) validator: Validator, @inject(TYPES.RedisCache) cache: Cache) {
     super(container.get<ViewRenderer>(TYPES.ViewRenderer));
     this.parser = parser;
     this.viewRenderer = viewRenderer;
     this.validator = validator;
+    this.cache = cache;
   }
   
   async index(req: IncomingMessage, res: ServerResponse) {
@@ -44,8 +47,16 @@ export class MoleculeController extends BaseController {
         return;
       }
 
-      const molecularWeight: number = molecule.calculateMolecularWeight();
-    
+      const molecularWeightFromCache = await this.cache.get(molecule.getFormula());
+      let molecularWeight: number;
+
+      if (molecularWeightFromCache) {
+        molecularWeight = Number(molecularWeightFromCache);
+      } else {
+        molecularWeight = molecule.calculateMolecularWeight();
+        this.cache.set(molecule.getFormula(), String(molecularWeight));
+      }
+
       this.sendHtmlResponse(res, 200, "molecule", {molecule: molecule.getFormula(), molecularWeight: molecularWeight});
     }
   }
