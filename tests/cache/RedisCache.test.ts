@@ -8,8 +8,12 @@ beforeAll(() => {
     cache = new RedisCache(redisTest);
 });
 
+beforeEach(async () => {
+    await redisTest.flushdb();
+});
+
 afterAll(async () => {
-    await redisTest.flushall();
+    await redisTest.flushdb();
     await redisTest.quit();
 });
 
@@ -31,4 +35,11 @@ test('Redis получает значение testValue по ключу testKey 
 
     const redisValue = await cache.get(key);
     expect(redisValue).toBe(value);
+});
+
+test('Redis получает null при попытке извлечь значение по несуществующему ключу из тестовой бд Redis (db:1)', async () => {
+    const key = "testKey";
+
+    const redisValue = await cache.get(key);
+    expect(redisValue).toBe(null);
 });
