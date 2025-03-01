@@ -11,7 +11,7 @@ test('ValidParentheses.validate() выдает null, когда значение
     expect(result).toBe(error);
 });
 
-test('ValidParentheses.validate() выдает ValidationError с корретным текстом, когда пользователь передает строку, в которой есть закрывающая скобка, но нет соответствующей ей открывающей.', () => {
+test('ValidParentheses.validate() выдает ValidationError с корректным текстом, когда пользователь передает строку, в которой есть закрывающая скобка, но нет соответствующей ей открывающей.', () => {
     const value = "test)";
     const error = new ValidationError(`Есть закрывающая скобка, но нет открывающей скобки.`);
 
@@ -19,7 +19,7 @@ test('ValidParentheses.validate() выдает ValidationError с корретн
     expect(result).toEqual(error);
 });
 
-test('ValidParentheses.validate() выдает ValidationError с корретным текстом, когда пользователь передает строку, в которой открывающая скобка идет раньше закрывающей.', () => {
+test('ValidParentheses.validate() выдает ValidationError с корректным текстом, когда пользователь передает строку, в которой открывающая скобка идет раньше закрывающей.', () => {
     const value = ")test(";
     const error = new ValidationError(`Открывающая скобка должна идти раньше, чем закрывающая скобка.`);
 
@@ -27,7 +27,7 @@ test('ValidParentheses.validate() выдает ValidationError с корретн
     expect(result).toEqual(error);
 });
 
-test('ValidParentheses.validate() выдает ValidationError с корретным текстом, когда пользователь передает строку, в которой есть открывающая скобка, но нет соответствующей ей закрывающей.', () => {
+test('ValidParentheses.validate() выдает ValidationError с корректным текстом, когда пользователь передает строку, в которой есть открывающая скобка, но нет соответствующей ей закрывающей.', () => {
     const value = "(test";
     const error = new ValidationError(`Не закрыли скобку.`);
 

@@ -4,7 +4,7 @@ import { NotBlank } from "../../../src/validation/validationRules/NotBlank";
 const validationDetails = {fieldName: "test"}
 const notBlank: NotBlank = new NotBlank(validationDetails);
 
-test('NotBlank.validate() выдает ValidationError с корретным текстом, когда правило валидации нарушено.', () => {
+test('NotBlank.validate() выдает ValidationError с корректным текстом, когда правило валидации нарушено.', () => {
     const value = "";
     const error = new ValidationError(`Значение поля ${validationDetails.fieldName} не может быть пустой строкой.`);
 

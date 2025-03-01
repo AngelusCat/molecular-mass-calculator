@@ -4,7 +4,7 @@ import { MaxLineLength } from "../../../src/validation/validationRules/MaxLineLe
 const validationDetails = {max: 50, fieldName: "test"};
 const maxLineLength: MaxLineLength = new MaxLineLength(validationDetails);
 
-test('MaxLineLength.validate() выдает ValidationError с корретным текстом, когда правило валидации нарушено.', () => {
+test('MaxLineLength.validate() выдает ValidationError с корректным текстом, когда правило валидации нарушено.', () => {
     const value = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttest";
     const error = new ValidationError(`Количество символов в строке (поле ${validationDetails.fieldName}) должно быть не больше ${validationDetails.max}, у вас - ${Array.from(value).length}.`);
 

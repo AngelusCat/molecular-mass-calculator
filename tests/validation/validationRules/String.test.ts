@@ -4,7 +4,7 @@ import { String } from "../../../src/validation/validationRules/String";
 const validationDetails = {fieldName: "test"};
 const string = new String(validationDetails);
 
-test('String.validate() выдает ValidationError с корретным текстом, когда правило валидации нарушено.', () => {
+test('String.validate() выдает ValidationError с корректным текстом, когда правило валидации нарушено.', () => {
     const value = 5;
     const error = new ValidationError(`Поле ${validationDetails.fieldName} должно быть строкой.`);
 
