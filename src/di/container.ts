@@ -15,8 +15,9 @@ import { MaxLineLength } from "../validation/validationRules/MaxLineLength.js";
 import { Regex } from "../validation/validationRules/Regex.js";
 import { ValidParentheses } from "../validation/validationRules/ValidParentheses.js";
 import { RedisCache } from "../cache/RedisCache.js";
-import { Cache } from "../interfaces/Cache.js";
+//import { Cache } from "../interfaces/Cache.js";
 import { ApiDocsController } from "../controllers/ApiDocsController.js";
+import Redis from "ioredis";
 
 const container = new Container();
 
@@ -52,7 +53,10 @@ container.bind<Validator>(TYPES.FormulaValidator).toDynamicValue(() => {
   });
 });
 
-container.bind<Cache>(TYPES.RedisCache).to(RedisCache);
+//container.bind<Cache>(TYPES.RedisCache).to(RedisCache);
+container.bind<RedisCache>(TYPES.RedisCache).toDynamicValue(() => {
+  return new RedisCache(new Redis());
+});
 container.bind<ApiDocsController>(TYPES.ApiDocsController).to(ApiDocsController);
 
 export { container };

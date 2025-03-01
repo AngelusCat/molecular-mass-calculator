@@ -1,10 +1,17 @@
 import { Cache } from "../interfaces/Cache.js";
-import { redis } from "../databases/RedisConnection.js";
+//import { redis } from "../databases/RedisConnection.js";
 import { injectable } from "inversify";
 import { correctType, notEmptyValue } from "../helpers/argumentChecks.js";
+import Redis from "ioredis";
 
 @injectable()
 export class RedisCache implements Cache {
+    private redis: Redis;
+
+    constructor(redisClient: Redis) {
+        this.redis = redisClient;
+    }
+    
     /**
      * Сохранить значение по ключу (SET key value)
      * @param {string} key ключ, под которым нужно сохранить значение
@@ -14,7 +21,7 @@ export class RedisCache implements Cache {
         notEmptyValue(key, "key");
         correctType(key, "string", "key");
         notEmptyValue(value, "value");
-        await redis.set(key, value);
+        await this.redis.set(key, value);
     }
 
     /**
@@ -24,6 +31,6 @@ export class RedisCache implements Cache {
     async get(key: string): Promise<string | null> {
         notEmptyValue(key, "key");
         correctType(key, "string", "key");
-        return await redis.get(key);
+        return await this.redis.get(key);
     }
 }

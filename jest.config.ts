@@ -5,6 +5,9 @@ const config: Config = {
   testEnvironment: 'node',
   rootDir: './',
   testMatch: ['<rootDir>/tests/**/*.test.ts'],
+  moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1", // Убирает .js при импорте в Jest
+  }
 };
 
 export default config;
