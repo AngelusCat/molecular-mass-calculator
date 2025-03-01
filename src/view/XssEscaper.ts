@@ -1,5 +1,4 @@
 import { injectable } from "inversify";
-import { InvalidArgumentError } from "../exceptions/InvalidArgumentError.js";
 import { correctType } from "../helpers/argumentChecks.js";
 
 @injectable()
