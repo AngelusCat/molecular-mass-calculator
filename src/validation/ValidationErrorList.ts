@@ -23,6 +23,15 @@ export class ValidationErrorList {
     isEmpty(): boolean {
         return Object.keys(this.errors).length === 0;
     }
+
+    getAll(): Record<string, Array<string>> {
+        if (this.isEmpty()) {
+            return {};
+        }
+        return Object.fromEntries(Object.entries(this.errors).map(([fieldName, validationErrors]) => [
+            fieldName, validationErrors.map(validationError => validationError.getMessage()),
+        ]));
+    }
 }
 
 /* TEST

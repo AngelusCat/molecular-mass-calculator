@@ -12,7 +12,8 @@ const baseController: BaseController = container.get<BaseController>(TYPES.BaseC
 
 const routes: Record<string, Function> = {
     '/index': moleculeController.index.bind(moleculeController),
-    '/calculateMolecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController)
+    '/calculateMolecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController),
+    '/api/molecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController)
 };
 
 const requestListener = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {

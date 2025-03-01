@@ -8,8 +8,9 @@
 <body>
     <form action="/calculateMolecularWeight" method="GET">
         <label>
-        Химическая формула молекулы: <input type="text" name="molecule">
+        Химическая формула молекулы: <input type="text" name="molecule" value={{ molecule }}>
         </label>
+        <p>{{ validationErrorMessageText }} {{ validationErrorMessages }}</p>
         <button type="submit">Вычислить</button>
     </form>
 </body>

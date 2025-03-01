@@ -37,6 +37,10 @@ export class MoleculeController extends BaseController {
       const moleculeFromGetParameters: string|null = new URL(req.url, `http://${req.headers.host}`).searchParams.get("molecule");
 
       if (moleculeFromGetParameters === null) {
+        if (this.thisIsApiRequest(req)) {
+          this.sendJsonResponse(res, 500, new ApiResponse(Status.ERROR, {}, "Неправильно сделан запрос.", {molecule: "Запрос требует query parameter molecule"}));
+          return;
+        }
         throw new InvalidStateException(`moleculeFromGetParameters не может быть null.`);
       }
 
@@ -45,12 +49,8 @@ export class MoleculeController extends BaseController {
       const listOfValidationErrors = this.validator.validate(molecule);
 
       if (!(listOfValidationErrors.isEmpty())) {
-        this.thisIsApiRequest(req) ? this.sendJsonResponse(res, 400, new ApiResponse(Status.ERROR, {}, "Ошибки валидации.", {})) : await this.sendHtmlResponse(res, 400, "index", {molecule: molecule.getFormula(), validationErrorMessages: listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' '), validationErrorMessageText: "Неправильно введены данные формы. Ошибки: "});
+        this.thisIsApiRequest(req) ? this.sendJsonResponse(res, 400, new ApiResponse(Status.ERROR, {}, "Ошибки валидации.", listOfValidationErrors.getAll())) : await this.sendHtmlResponse(res, 400, "index", {molecule: molecule.getFormula(), validationErrorMessages: listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' '), validationErrorMessageText: "Неправильно введены данные формы. Ошибки: "});
         return;
-        /*
-        await this.sendHtmlResponse(res, 400, "index", {molecule: molecule.getFormula(), validationErrorMessages: listOfValidationErrors.getListOfFieldErrors("formula").map(error => error.getMessage()).join(' '), validationErrorMessageText: "Неправильно введены данные формы. Ошибки: "});
-        return;
-        */
       }
 
       const molecularWeightFromCache = await this.cache.get(molecule.getFormula());
