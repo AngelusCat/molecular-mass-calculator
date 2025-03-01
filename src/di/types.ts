@@ -6,5 +6,6 @@ export const TYPES = {
     BaseController: Symbol.for("BaseController"),
     FileReader: Symbol.for("FileReader"),
     FormulaValidator: Symbol.for("FormulaValidator"),
-    RedisCache: Symbol.for("RedisCache")
+    RedisCache: Symbol.for("RedisCache"),
+    ApiDocsController: Symbol.for("ApiDocsController")
 };

@@ -16,6 +16,7 @@ import { Regex } from "../validation/validationRules/Regex.js";
 import { ValidParentheses } from "../validation/validationRules/ValidParentheses.js";
 import { RedisCache } from "../cache/RedisCache.js";
 import { Cache } from "../interfaces/Cache.js";
+import { ApiDocsController } from "../controllers/ApiDocsController.js";
 
 const container = new Container();
 
@@ -52,5 +53,6 @@ container.bind<Validator>(TYPES.FormulaValidator).toDynamicValue(() => {
 });
 
 container.bind<Cache>(TYPES.RedisCache).to(RedisCache);
+container.bind<ApiDocsController>(TYPES.ApiDocsController).to(ApiDocsController);
 
 export { container };

@@ -31,7 +31,86 @@ export class MoleculeController extends BaseController {
   async index(req: IncomingMessage, res: ServerResponse) {
     this.sendHtmlResponse(res, 200, "index", {molecule: " ", validationErrorMessages: " ", validationErrorMessageText: " "});
   }
-
+  /**
+   * @swagger
+   * /molecularWeight:
+   *   get:
+   *     summary: "Считает молекулярную массу молекулы"
+   *     parameters:
+   *       - in: query
+   *         name: molecule
+   *         required: true
+   *         schema:
+   *         type: string
+   *         example: H, H2, H2SO4, H2(O2)
+   *     responses:
+   *       200:
+   *         description: Успешное выполнение запроса
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 status:
+   *                   schema:
+   *                     $ref: '#/components/schemas/Status'
+   *                 data:
+   *                   type: object
+   *                   properties:
+   *                     molecularWeight:
+   *                       type: number
+   *                       example: 23.184
+   *                 message:
+   *                   schema:
+   *                     $ref: '#/components/schemas/Message'
+   *                 errors:
+   *                   type: object
+   *                   example: {}  
+   *       500:
+   *         description: Внутренняя ошибка сервера                       
+   *         content:                             
+   *           application/json:                           
+   *             schema:
+   *               type: object       
+   *               properties:
+   *                 status:
+   *                   schema:
+   *                     $ref: '#/components/schemas/Status'
+   *                 data:                   
+   *                   type: object
+   *                   example: {}                 
+   *                 message:                   
+   *                   schema:                     
+   *                     $ref: '#/components/schemas/Message'                           
+   *                 errors:
+   *                   type: object       
+   *                   properties:
+   *                     molecule:
+   *                       type: string         
+   *       400:
+   *         description: Ошибка валидации           
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 status:
+   *                   schema:
+   *                     $ref: '#/components/schemas/Status'
+   *                 data:   
+   *                   type: object           
+   *                   example: {}           
+   *                 message:                   
+   *                   schema:                   
+   *                     $ref: '#/components/schemas/Message'                   
+   *                 errors:                         
+   *                   type: object
+   *                   properties:
+   *                     formula:
+   *                       type: array
+   *                       items:
+   *                        type: string                 
+   */
   async calculateMolecularWeight(req: IncomingMessage, res: ServerResponse) {
     if (req.url) {
       const moleculeFromGetParameters: string|null = new URL(req.url, `http://${req.headers.host}`).searchParams.get("molecule");

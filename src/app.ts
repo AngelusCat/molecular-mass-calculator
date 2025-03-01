@@ -6,14 +6,17 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { URL } from "url";
 import { MoleculeController } from "./controllers/MoleculeController.js";
 import { BaseController } from "./controllers/BaseController.js";
+import { ApiDocsController } from "./controllers/ApiDocsController.js";
 
 const moleculeController: MoleculeController = container.get<MoleculeController>(TYPES.MoleculeController);
 const baseController: BaseController = container.get<BaseController>(TYPES.BaseController);
+const apiDocsController: ApiDocsController = container.get<ApiDocsController>(TYPES.ApiDocsController);
 
 const routes: Record<string, Function> = {
     '/index': moleculeController.index.bind(moleculeController),
     '/calculateMolecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController),
-    '/api/molecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController)
+    '/api/molecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController),
+    '/api/api-docs.json': apiDocsController.get.bind(apiDocsController)
 };
 
 const requestListener = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
