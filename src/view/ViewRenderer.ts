@@ -1,4 +1,3 @@
-import fs from "fs";
 import { template_path } from "../helpers/paths.js";
 import path from "path";
 import { FileReader } from "../fileSystem/FileReader.js";
