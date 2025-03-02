@@ -2,7 +2,6 @@ import { injectable } from "inversify";
 import { ValidationRule } from "../interfaces/ValidationRule.js";
 import { ValidationError } from "./ValidationError.js";
 import { ValidationErrorList } from "./ValidationErrorList.js";
-import { NotBlank } from "./validationRules/NotBlank.js";
 
 @injectable()
 export class Validator {
