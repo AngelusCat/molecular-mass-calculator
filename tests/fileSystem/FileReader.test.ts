@@ -2,7 +2,7 @@ import path, { dirname } from "path";
 import fs from "fs/promises";
 import { FileReader } from "../../src/fileSystem/FileReader";
 
-const testFilePath = path.join("testFiles", "fixtures", "test.html");
+const testFilePath = path.join("tests", "fixtures", "test.html");
 const testContent = "<p>{{ test }}</p>";
 
 beforeAll(async () => {
@@ -11,11 +11,9 @@ beforeAll(async () => {
     await fs.writeFile(testFilePath, testContent, { encoding: 'utf8' });
 });
 
-
 afterAll(async () => {
     await fs.unlink(testFilePath);
     await fs.rm(path.dirname(testFilePath), { recursive: true, force: true });
-    await fs.rm("testFiles", { recursive: true, force: true });
 });
 
 const fileReader = new FileReader();
