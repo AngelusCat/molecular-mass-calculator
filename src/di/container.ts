@@ -54,7 +54,7 @@ container.bind<Validator>(TYPES.FormulaValidator).toDynamicValue(() => {
 });
 
 container.bind<RedisCache>(TYPES.RedisCache).toDynamicValue(() => {
-  return new RedisCache(new Redis({host: "redis", port: 5379}));
+  return new RedisCache(new Redis({host: "redis", port: 6379}));
 });
 container.bind<ApiDocsController>(TYPES.ApiDocsController).to(ApiDocsController);
 

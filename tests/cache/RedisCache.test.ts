@@ -2,7 +2,7 @@ import Redis from "ioredis";
 import { RedisCache } from "../../src/cache/RedisCache";
 
 let cache: RedisCache;
-const redisTest = new Redis({db: 1});
+const redisTest = new Redis({db: 1, host: "redis", port: 6379});
 
 beforeAll(() => {
     cache = new RedisCache(redisTest);

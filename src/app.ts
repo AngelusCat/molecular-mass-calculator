@@ -13,7 +13,7 @@ const baseController: BaseController = container.get<BaseController>(TYPES.BaseC
 const apiDocsController: ApiDocsController = container.get<ApiDocsController>(TYPES.ApiDocsController);
 
 const routes: Record<string, Function> = {
-    '/index': moleculeController.index.bind(moleculeController),
+    '/': moleculeController.index.bind(moleculeController),
     '/calculateMolecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController),
     '/api/molecularWeight': moleculeController.calculateMolecularWeight.bind(moleculeController),
     '/api/api-docs.json': apiDocsController.get.bind(apiDocsController)
