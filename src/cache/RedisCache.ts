@@ -1,5 +1,4 @@
 import { Cache } from "../interfaces/Cache.js";
-//import { redis } from "../databases/RedisConnection.js";
 import { injectable } from "inversify";
 import { correctType, notEmptyValue } from "../helpers/argumentChecks.js";
 import Redis from "ioredis";

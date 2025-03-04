@@ -6,6 +6,5 @@ import { fileURLToPath } from "url";
  * @returns файловый путь до директории с html шаблонами
  */
 export function template_path() {
-    //return path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "resources", "templates");
-    return path.join("helpers", "..", "resources", "templates");
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "resources", "templates");
 }
